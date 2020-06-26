@@ -1,114 +1,83 @@
 public class Solution {
     public int MinMutation(string start, string end, string[] bank) {
         
+        var bankSet = new HashSet<string>(bank);
+        
         // Base case: One or more of the strings are null or empty.
         // Moreover, if bank is empty, no mutations are valid at all.
         // Moreover, if the start and end genes are different in length, then it is an issue.
         // Lastly, if bank does not contain the end result, then it is an issue.
-        if (string.IsNullOrEmpty(start) || string.IsNullOrEmpty(end) || bank.Length == 0 || start.Length != end.Length || !bank.Contains(end)) {
+        if (string.IsNullOrEmpty(start) || string.IsNullOrEmpty(end) || bankSet.Count == 0 || start.Length != end.Length || !bankSet.Contains(end)) {
             return -1;
         }
         
         // Trivial case: start and end require no mutation, and is in the bank.
-        if (start.Equals(end) && bank.Contains(end)) {
+        if (start.Equals(end) && bankSet.Contains(end)) {
             return 1;
         }
-        
-        // Counter
-        var count = 0;
-        
-        // endDiff will be useful in going backwards from the result string.
-        var endDiff = new int[bank.Length];
-        
-        // O(n * b)
-        GenerateDifferences(endDiff, end, bank);
 
-        // O(n) - mapped the differences to each bank entry of endDiffs
-        // Excluding the end string, itself.
-        var bankDict = new Dictionary<string, int>();
-        for (int m = 0; m < bank.Length; m++) {
-            if (!bankDict.ContainsKey(bank[m]) && bank[m] != end) {
-                bankDict.Add(bank[m], endDiff[m]);
-            }
-        }
+        // Contains diffs that are 1 change away from the end.
+        var endDiff = GenerateDifferences(end, bank);
         
-        // BFS data structure using a queue
+        // BFS Data structures
         var queue = new Queue<string>();
         var visited = new HashSet<string>();
-        queue.Enqueue(end);
         
-        // NOTE: All differences are referenced against the end string.
-        // Therefore, at each step, we get closer to start
-        var currStr = end;
-        var foundOne = false;
-
-        // This only visits nodes that are in the valid path. The shortest path may be O(b).
-        // O(n^2*b) - possibly. Need to analyze again.
-        while (true) {
+        queue.Enqueue(start);
+        visited.Add(start);
+        var level = 0;
+        
+        // BFS, or level order traversal.
+        // Overall O(b^2 * n)
+        while (queue.Count != 0) {
             var qCount = queue.Count;
-
-            // O(n)
-            if (FindDifference(start, currStr) == 1) {
-                foundOne = true;
-                break;
-            }
+            level++;
             
-            if (foundOne) {
-                count++;
-                foundOne = false;
-            }
-            
-            if (qCount == 0) {
-                break;
-            }
-            
-            // O(b*n) at most.
             while (qCount > 0) {
-                currStr = queue.Dequeue();
-                qCount--;
-                          
-                if (bankDict.ContainsKey(currStr)) {
-                    bankDict.Remove(currStr);
+                var currStr = queue.Dequeue();
+                
+                // Termination case 1: When we have a string that is 1 change away from the end
+                // O(1) because we are using a set
+                if (endDiff.Contains(currStr)) {
+                    return level;
                 }
                 
-                // This gradually shrinks, as we find paths.
-                // Therefore, we do not need to repeat and revisit old paths.
-                // O(n) at most, since the dict shrinks each time.
-                foreach (var kvp in bankDict) {
-                    if (!visited.Contains(kvp.Key)) {                       
-                        var diff = FindDifference(kvp.Key, currStr);
-                        if (diff == 1) {
-                            queue.Enqueue(kvp.Key);
-                            visited.Add(kvp.Key);
-                            foundOne = true;                            
+                // Remove this from the set so we do not have to iterate over it again.
+                bankSet.Remove(currStr);
+                
+                // O(b), which is continously shrinking.
+                foreach (var word in bankSet) {
+                    if (!visited.Contains(word)) {
+                        // O(n)
+                        var pathDiff = FindDifference(word, currStr);
+                        if (pathDiff == 1) {
+                            // Termination case 2: When we have the actual end string.
+                            if (word.Equals(end)) {
+                                return level;
+                            }
+                            queue.Enqueue(word);
+                            visited.Add(word);
                         }
-                    }
-                }              
+                    }      
+                }  
+                qCount--;
             }
-        }
-        
-        // Since it is guaranteed that once you get here, the end string is included in the bank.
-        // It was not counted during the loop.
-        if (foundOne) {
-            count++;    
-        }
-        
-        if (count == 0) {
-            return -1;
-        }
-        
-        return count;
+        }     
+        return -1;
     }
     
     // O(n*b)
-    private void GenerateDifferences(int[] diffArr, string start, string[] bank) {        
-        for (int i = 0; i < start.Length; i++) {
-            for (int j = 0; j < bank.Length; j++) {
-                if (!start[i].Equals(bank[j][i])) {
-                    diffArr[j]++;
-                }
+    private HashSet<string> GenerateDifferences(string end, string[] bank) {        
+        var diffSet = new HashSet<string>();
+        foreach (var gene in bank) {
+            var diff = FindDifference(end, gene);
+            if (diff == 1) {
+                diffSet.Add(gene);
             }
         }
+        
+        return diffSet;
+        
     }
     
     // O(n) complexity, since its a single scan of both strings at the same time
