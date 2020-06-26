@@ -41,9 +41,9 @@ public class Solution {
         // Therefore, at each step, we get closer to start
         var currStr = end;
         var foundOne = false;
-        // O(b) at most, since we only queue valid case nodes.
-        // This complexity is still smaller than O(n*b);
-        
+
+        // This only visits nodes that are in the valid path. The shortest path may be O(b).
+        // O(n^2*b) - possibly. Need to analyze again.
         while (true) {
             var qCount = queue.Count;
 
@@ -62,7 +62,7 @@ public class Solution {
                 break;
             }
             
-            // O(b) at most.
+            // O(b*n) at most.
             while (qCount > 0) {
                 currStr = queue.Dequeue();
                 qCount--;
@@ -73,7 +73,7 @@ public class Solution {
                 
                 // This gradually shrinks, as we find paths.
                 // Therefore, we do not need to repeat and revisit old paths.
-                // O(b*n) at most
+                // O(n) at most, since the dict shrinks each time.
                 foreach (var kvp in bankDict) {
                     if (!visited.Contains(kvp.Key)) {                       
                         var diff = FindDifference(kvp.Key, currStr);
