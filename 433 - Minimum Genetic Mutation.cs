@@ -32,7 +32,6 @@ public class Solution {
             }
         }
         
-        
         // BFS data structure using a queue
         var queue = new Queue<string>();
         var visited = new HashSet<string>();
@@ -122,6 +121,4 @@ public class Solution {
         }
         return diff;
     }
-    
-    
 }
