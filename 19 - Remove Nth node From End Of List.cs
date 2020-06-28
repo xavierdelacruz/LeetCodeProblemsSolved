@@ -11,7 +11,7 @@
  */
 public class Solution {
     public ListNode RemoveNthFromEnd(ListNode head, int n) {
-        
+      
         if (head == null) {
             return null;
         }
@@ -49,6 +49,7 @@ public class Solution {
     
     // Helper function, at most O(n), since we only need to traverse half the list
     // using the fast pointer technique when finding the midpoint.
+    // Then do the aforementioned Math to find the length.
     private int FindLength(ListNode head) {
         var slowPtr = head;     
         var fastPtr = head;
