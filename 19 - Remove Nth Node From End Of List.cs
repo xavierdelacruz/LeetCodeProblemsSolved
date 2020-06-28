@@ -19,9 +19,10 @@ public class Solution {
         if (n <= 0) {
             return head;
         }
+        
         // Find length of the entire linked list first.
         // If odd, where fastPtr.next is null, then we do ((slowptr index + 1) * 2) - 1
-        // If even, where fastPtr is null, then we do (slowptr index/2 + 1) * 2
+        // If even, where fastPtr is null, then we do slowptr index * 2
         var length = FindLength(head);
         var targetIndex = length - n;
         
