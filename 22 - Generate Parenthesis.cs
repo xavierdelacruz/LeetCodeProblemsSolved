@@ -1,6 +1,7 @@
 public class Solution {
     public IList<string> GenerateParenthesis(int n) 
     {
+        
         IList<string> list = new List<string>();
         Generate(list, new char[2*n], 0, n, n);
         return list;
