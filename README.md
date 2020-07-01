@@ -7,5 +7,5 @@ Weekly Log:
 
 - July 1, 2020 - 91 Problems solved.
     * 48 Easy
-    * 39 Medium
-    * 4 Hard
+    * 41 Medium
+    * 4 hard
