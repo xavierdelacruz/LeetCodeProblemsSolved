@@ -26,7 +26,7 @@ public class Solution {
             var currInterval = result[result.Count-1];
             var nextInterval = sorted[i];
             
-            // If there is some form of overlap, change it. // O(1) method calling Pop.
+            // If there is some form of overlap, change it.
             if (nextInterval[0] <= currInterval[1]) {
                 currInterval[1] = Math.Max(nextInterval[1], currInterval[1]);
             } else {
@@ -34,7 +34,7 @@ public class Solution {
             }
         }
         
-        // O(n) converting it back to stack
+        // O(n) converting it back to array
         return result.ToArray();
     }
 }
