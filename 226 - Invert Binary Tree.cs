@@ -14,20 +14,32 @@
 public class Solution {
     public TreeNode InvertTree(TreeNode root) {
         
-        // BASE CASE 1: Root does not exist. Return null or root.
+        // BASE CASE: Root does not exist. Return null or root.
         if (root == null) {
             return root;
         }
         
-        // Use helper to now investigate subtrees.
-        // Go all the way down and bubble the changes.
-        // Post Order traversal, which starts at the bottom, and bubbles the changes up.
-        var left = InvertTree(root.left);
-        var right = InvertTree(root.right);
+        var q = new Queue<TreeNode>();
+        q.Enqueue(root);
         
-        root.right = left;
-        root.left = right;
-        
-        return root;  
+        while(q.Count != 0) {
+            
+            var curr = q.Dequeue();
+            
+            var left = curr.left;
+            var right = curr.right;
+            
+            curr.left = right;
+            curr.right = left;
+            
+            if (curr.left != null) {
+                q.Enqueue(curr.left);
+            }
+            
+            if (curr.right != null) {
+                q.Enqueue(curr.right);
+            }
+        }        
+        return root;
     }   
 }
