@@ -54,4 +54,46 @@ public class Solution {
         
         return root;    
     }
+    
+    // NOTE: THIS IS THE OTHER WAY OF DOING IT. It is O(n^2)
+    // public TreeNode BuildTree(int[] preorder, int[] inorder) {
+    //     if (preorder.Length == 0 || inorder.Length == 0) {
+    //         return null;
+    //     }
+        
+    //     var preIdx = 0;
+    //     return BuildTreeHelper(preorder, inorder, ref preIdx);
+    // }
+        
+    // private TreeNode BuildTreeHelper(int[] pre, int[] ino, ref int preIdx) {
+        
+    //     // This corresponds to 0 elements being observed.
+    //     if (ino.Length == 0) {
+    //         return null;
+    //     }
+        
+    //     if (preIdx >= pre.Length) {
+    //         return null;
+    //     }
+        
+    //     // Creates the node
+    //     var root = new TreeNode(pre[preIdx]);
+        
+    //     // Finds the index of the current item using the inorder dict (look up is O(1))
+    //     var rootIdx = Array.IndexOf(ino, root.val);      
+        
+    //     preIdx++;
+        
+    //     var left = ino.Take(rootIdx).ToArray();
+    //     var right = ino.Skip(rootIdx+1).ToArray();
+        
+    //     // Look into the left partition of the in-order array
+    //     root.left = BuildTreeHelper(pre, left, ref preIdx);
+        
+    //     // Look into the right partition of the in-order array
+    //     root.right = BuildTreeHelper(pre, right, ref preIdx);
+        
+    //     return root;    
+    // }
+
 }
