@@ -13,43 +13,27 @@
  */
 public class Solution {
     public int KthSmallest(TreeNode root, int k) {
-        if (root == null)
-        {
+        if (root == null) {
             return 0;
         }
         
-        // O(n) Space
-        var sortedVals = new SortedSet<int>();
-        
-        // O(n) traversals.
-        TraverseTree(root, sortedVals);
-        
-        var i = 0;
-        foreach (var item in sortedVals) {
-            if (i == k-1) {
-                return item;
+        var i = 0;   
+        var stack = new Stack<TreeNode>();
+        var curr = root;       
+        while (stack.Count != 0 || curr != null) {        
+            while (curr != null) {
+                stack.Push(curr);
+                curr = curr.left;
             }
+            
+            curr = stack.Pop();
+            if (i == k-1) {                
+                return curr.val;
+            }
+            
             i++;
-        }
+            curr = curr.right;
+        }       
         return 0;
-    }
-    
-    private void TraverseTree(TreeNode root, SortedSet<int> sorted) {       
-        var queue = new Queue<TreeNode>();       
-        queue.Enqueue(root);
-        
-        while (queue.Count != 0) {
-            var curr = queue.Dequeue();           
-            sorted.Add(curr.val);
-            
-            if (curr.right != null) {
-                queue.Enqueue(curr.right);
-            }
-            
-            if (curr.left != null) {
-                queue.Enqueue(curr.left);
-            }
-        }        
-        return;
     }
 }
