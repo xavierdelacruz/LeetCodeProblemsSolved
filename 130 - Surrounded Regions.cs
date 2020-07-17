@@ -42,6 +42,26 @@ public class Solution {
         }
     }
     
+    private void MarkBadDFS(char[][] board, HashSet<(int x, int y)> visited, int x, int y) {
+        var dirs = new List<(int x, int y)>() { (0, 1), (0, -1), (1, 0), (-1, 0) }; 
+        var s = new Stack<(int x, int y)>();
+        s.Push((x, y));
+        visited.Add((x, y));
+        
+        while (s.Count != 0) {
+            var curr = s.Pop();
+            board[curr.x][curr.y] = '#';
+            foreach (var dir in dirs) {
+                var newX = curr.x + dir.x;
+                var newY = curr.y + dir.y;
+                if (IsTraverseable(board, visited, newX, newY)) {
+                    s.Push((newX, newY));
+                    visited.Add((newX, newY));
+                }
+            }
+        }
+    }
+    
     private bool IsTraverseable(char[][] board, HashSet<(int x, int y)> visited, int x, int y) {        
         if (x < 0 || x >= board.Length || y < 0 || y >= board[0].Length || visited.Contains((x, y)) || board[x][y].Equals('X')) {
             return false;
