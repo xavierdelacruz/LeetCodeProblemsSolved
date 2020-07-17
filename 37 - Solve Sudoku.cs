@@ -42,8 +42,10 @@ public class Solution {
                 }              
             }
             // Change it back when it is invalid.
-            board[row][col] = '.';           
+                       
         } 
+
+        board[row][col] = '.';
         return false;
     }
     
