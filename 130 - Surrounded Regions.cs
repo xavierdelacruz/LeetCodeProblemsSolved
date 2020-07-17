@@ -46,8 +46,7 @@ public class Solution {
         var dirs = new List<(int x, int y)>() { (0, 1), (0, -1), (1, 0), (-1, 0) }; 
         var s = new Stack<(int x, int y)>();
         s.Push((x, y));
-        visited.Add((x, y));
-        
+        visited.Add((x, y));      
         while (s.Count != 0) {
             var curr = s.Pop();
             board[curr.x][curr.y] = '#';
@@ -58,6 +57,20 @@ public class Solution {
                     s.Push((newX, newY));
                     visited.Add((newX, newY));
                 }
+            }
+        }
+    }
+
+    private void MarkBadDFSRec(char[][] board, HashSet<(int x, int y)> visited, int x, int y) {
+        var dirs = new List<(int x, int y)>() { (0, 1), (0, -1), (1, 0), (-1, 0) };       
+        visited.Add((x, y));     
+        board[x][y] = '#';
+        
+        foreach (var dir in dirs) {
+            var newX = x + dir.x;
+            var newY = y + dir.y;
+            if (IsTraverseable(board, visited, newX, newY)) {
+                MarkBadDFS(board, visited, newX, newY);
             }
         }
     }
