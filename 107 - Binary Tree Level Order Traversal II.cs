@@ -42,7 +42,7 @@ public class Solution {
             res.Add(currList);
             currList = new List<int>();
         }        
-        // Reversal takes O(n)
+        // Reversal takes O(h)
         res.Reverse();
         return res;        
     }
