@@ -5,7 +5,7 @@ Moreover, not all solutions are final. I may revise them when I get a chance to 
 
 Weekly Log:
 
-- July 8, 2020 - 111 Problems solved.
-    * 49 Easy
-    * 56 Medium
-    * 6 hard
+- July 24, 2020 - 150 Problems solved.
+    * 62 Easy
+    * 78 Medium
+    * 10 hard
