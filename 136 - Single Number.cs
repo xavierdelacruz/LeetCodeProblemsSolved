@@ -9,19 +9,10 @@ public class Solution {
         }
         
         // Using O(n) space;
-        var hashset = new HashSet<int>();
+        var result = 0;
         
         for (int i = 0; i < nums.Length; i++) {
-            if (!hashset.Contains(nums[i])) {
-                hashset.Add(nums[i]);
-            } else {
-                hashset.Remove(nums[i]);
-            }
-        }
-        
-        var result = 0;
-        foreach (var item in hashset) {
-            result += item;
+            result ^= nums[i];
         }
         
         return result;
