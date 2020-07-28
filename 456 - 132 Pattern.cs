@@ -29,22 +29,19 @@ public class Solution {
                     return true;
                 }
                 
-                // Advance j and k if we've already used this value before.
+                // Advance j we've already used this value before.
                 if (i+1 != j && nums[j] == nums[j-1]) {
                     j++;
-                    k--;
                     continue;
                 }
                 
-                // Advance j if its a duplicate, along with k, since its important that it stays ahead of j
+                // Advance j if its a duplicate
                 if (nums[i] == nums[j] || nums[j] <= nums[i]) {
                     j++;
-                    k--;
                     continue;
                 }
                 
                 // Advance only k if its a duplicate. j will stay in place.
-                // It will also advance if value of k > j
                 if (nums[j] == nums[k] || nums[k] >= nums[j] || nums[k] <= nums[i]) {
                     k--;
                     continue;
