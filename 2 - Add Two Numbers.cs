@@ -24,7 +24,7 @@ public class Solution {
         var carry = 0;
         ListNode curr = new ListNode(0);
         ListNode headRef = curr;
-        while (l1 != null || l2 != null) {
+        while (l1 != null || l2 != null || carry > 0) {
             var curr1 = 0;            
             if (l1 != null) {
                 curr1 = l1.val;
@@ -50,11 +50,6 @@ public class Solution {
             }
                 
         }
-        
-        if (carry > 0) {
-            curr.next = new ListNode(carry);
-        }
-        
         return headRef.next;
     }
 }
