@@ -13,25 +13,45 @@
  */
 public class Solution {
     public IList<int> PostorderTraversal(TreeNode root) {
-        var res = new List<int>();
         
+        var res = new List<int>();
         if (root == null) {
             return res;
         }
         
-        PostOrderHelper(root, res);
-        return res;
-    }
-    
-    private void PostOrderHelper(TreeNode root, IList<int> res) {
-        if (root == null) {
-            return;
+        var stack = new Stack<TreeNode>();
+        if (root.right != null) {
+            stack.Push(root.right);
         }
+        stack.Push(root);
+        root = root.left;
         
-        PostOrderHelper(root.left, res);
-        PostOrderHelper(root.right, res);
-        
-        res.Add(root.val);
-        return;
+        while (stack.Count != 0) {
+            
+            while (root != null) {
+                if (root.right != null) {
+                    stack.Push(root.right);
+                }
+                stack.Push(root);
+                root = root.left;
+            }
+            
+            root = stack.Pop();
+            
+            // Check the right child of the currently popped root.
+            // If it has one, it is going to be at the top of the stack
+            // Put the currentlly pooped root back into the stack.
+            // Start visiting all the chilren and subtrees of the right.
+            if (root.right != null && stack.Count != 0 && root.right.Equals(stack.Peek())) {          
+                var curr = stack.Pop();
+                stack.Push(root);
+                // Now set root to this, and traverse it all the way.
+                root = curr;
+            } else {
+                res.Add(root.val);
+                root = null;
+            }
+        }
+        return res;
     }
 }
