@@ -24,57 +24,55 @@ public class Solution {
             return l1;
         }
         
-        var revL1 = ReverseList(l1);
-        var revL2 = ReverseList(l2);
+        var stack1 = MakeStack(l1);
+        var stack2 = MakeStack(l2);
         
-        var carry = 0;
         var curr = new ListNode(0);
         var headRef = curr;
-        while (revL1 != null || revL2 != null) {
+        var carry = 0;
+        var stackSum = new Stack<int>();
+        while (stack1.Count > 0 || stack2.Count > 0 || carry > 0) {
             var curr1 = 0;
-            if (revL1 != null) {
-                curr1 = revL1.val;
+            if (stack1.Count > 0) {
+                curr1 = stack1.Pop();
             }
             
             var curr2 = 0;
-            if (revL2 != null) {
-                curr2 = revL2.val;
+            if (stack2.Count > 0) {
+                curr2 = stack2.Pop();
             }
             
             var sum = curr1 + curr2 + carry;
             carry = sum/10;
             var currDigit = sum%10;
-            curr.next = new ListNode(currDigit);
             
-            curr = curr.next;
-            if (revL1 != null) {
-                revL1 = revL1.next;
-            }
-            
-            if (revL2 != null) {
-                revL2 = revL2.next;
-            }
+            stackSum.Push(currDigit);
         }
         
-        if (carry > 0) {
-            curr.next = new ListNode(carry);
-        }
-        
-        return ReverseList(headRef.next);
-                    
+        return MakeList(stackSum);
+               
     }
     
-    private ListNode ReverseList(ListNode l1) {     
-        ListNode prev = null;
-        ListNode curr = l1;
-        
-        while (curr != null) {
-            var next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;           
+    private ListNode MakeList(Stack<int> stack) {      
+        var curr = new ListNode(stack.Pop());     
+        var headRef = curr;
+        while (stack.Count > 0) {
+            curr.next = new ListNode(stack.Pop());
+            curr = curr.next;
         }
         
-        return prev;
+        return headRef;
+    
     }
+    
+    private Stack<int> MakeStack(ListNode list) {
+        var stack = new Stack<int>();
+        
+        while (list != null) {
+            var curr = list.val;
+            stack.Push(curr);
+            list = list.next;
+        }
+        return stack;
+    } 
 }
