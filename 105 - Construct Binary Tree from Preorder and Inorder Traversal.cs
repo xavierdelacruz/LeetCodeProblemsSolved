@@ -14,45 +14,41 @@
 public class Solution {
     public TreeNode BuildTree(int[] preorder, int[] inorder) {
         if (preorder.Length == 0 || inorder.Length == 0) {
-            return null;
+            return null; 
         }
         
         var inoDict = new Dictionary<int, int>();
         for (int i = 0; i < inorder.Length; i++) {
-            if (!inoDict.ContainsKey(inorder[i])) {
-                inoDict.Add(inorder[i], i);
-            }
+            inoDict.Add(inorder[i], i);
         }
-        var preIdx = 0;
-        return BuildTreeHelper(preorder, inorder, ref preIdx, 0, inorder.Length-1, inoDict);
+        
+        var idx = 0;
+        return BuildTree(preorder, inoDict, ref idx, 0, inorder.Length-1);
     }
+    
+    private TreeNode BuildTree(int[] pre, Dictionary<int, int> inoDict, ref int currIdx, int start, int end) {
         
-    private TreeNode BuildTreeHelper(int[] pre, int[] ino, ref int preIdx, int inoStart, int inoEnd, Dictionary<int, int> inoDict) {
-        
-        // This corresponds to 0 elements being observed.
-        if (inoStart > inoEnd) {
+        if (currIdx >= pre.Length) {
             return null;
         }
         
-        if (preIdx >= pre.Length) {
+        if (start > end) {
+            return null;
+        }
+   
+        // Find candidate's position in the 'subarray'
+        var rootInoIdx = inoDict[pre[currIdx]];
+        
+        // Checks if the given index is within the boundaries of the 'subarray'
+        if (rootInoIdx < start || rootInoIdx > end) {
             return null;
         }
         
-        // Creates the node
-        var root = new TreeNode(pre[preIdx]);
-        
-        // Finds the index of the current item using the inorder dict (look up is O(1))
-        var rootIdx = inoDict[root.val];      
-        
-        preIdx++;
-        
-        // Look into the left partition of the in-order array
-        root.left = BuildTreeHelper(pre, ino, ref preIdx, inoStart, rootIdx-1, inoDict);
-        
-        // Look into the right partition of the in-order array
-        root.right = BuildTreeHelper(pre, ino, ref preIdx, rootIdx+1, inoEnd, inoDict);
-        
-        return root;    
+        var root = new TreeNode(pre[currIdx]);
+        currIdx++;
+        root.left = BuildTree(pre, inoDict, ref currIdx, start, rootInoIdx-1);     
+        root.right = BuildTree(pre, inoDict, ref currIdx, rootInoIdx+1, end);
+        return root;
     }
     
     // NOTE: THIS IS THE OTHER WAY OF DOING IT. It is O(n^2)
