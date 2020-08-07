@@ -25,7 +25,6 @@ public class Solution {
                 finalEnd = end;
                 longestSoFar = len;
             }
-            Console.WriteLine();
             start = 0;
             end = 0;
             ExpandFromCenter(i, i+1, s, ref start, ref end);
