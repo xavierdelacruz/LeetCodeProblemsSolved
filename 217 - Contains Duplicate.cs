@@ -1,18 +1,19 @@
 public class Solution {
     public bool ContainsDuplicate(int[] nums) {
-        
         if (nums.Length == 0 || nums.Length == 1) {
             return false;
         }
-        // Sort, which is nlogn
-        Array.Sort(nums);      
-        var prev = nums[0];        
-        for (int i = 1; i < nums.Length; i++) {
-            if (prev == nums[i]) {
+        
+        HashSet<int> hs = new HashSet<int>();
+        
+        for (int i = 0; i < nums.Length; i++) {
+            if (hs.Contains(nums[i])) {
                 return true;
+            } else {
+                hs.Add(nums[i]);
             }
-            prev = nums[i];
         }
+        
         return false;
     }
 }
