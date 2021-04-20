@@ -1,36 +1,48 @@
 public class Solution {
     public int MaxProduct(int[] nums) {
         
-        // BASE CASE 1: no elements. Return 0.
-        if (nums.Length == 0) {
+        // Base case 1:
+        if (nums.Length == 0) 
+        {
             return 0;
-        }
+        } 
         
-        // BASE CASE 2: only a single element. Return just that.
-        if (nums.Length == 1) {
+        // Base case 2:
+        if (nums.Length == 1) 
+        {
             return nums[0];
         }
         
-        var max = nums[0];
-        var min = nums[0];
-        var bestValue = nums[0];
+        // Non trivial cases
+        // Examples
+        // [-1, 2, -1, 2] = 4
+        // [-1, 0, -1, 3] = 3
+        // [-3, 0, -3, 1] = 1
+        // [2, -1, -1]  = 2
+        // [2, -1, -1, -2] = 2
         
-        // Start at idx 1, since we are accounting for the first element already.
-        for (int i = 1; i < nums.Length; i++) {
-            var prevMin = min;
-            var prevMax = max;
+        // The idea is, we want to keep multiplying and keep updating the min and max, 
+        // because our min (which would likely be a negative number) can become the largest suddenly when encountering another negative
+        int min = nums[0];
+        int max = nums[0];
+        int result = nums[0];
+        
+        for (int i = 1; i < nums.Length; i++) 
+        {
+            // We need this to keep track of the min and max, since they mutate
+            int prevMin = min;
+            int prevMax = max;
             
-            // This is where both - x + or vice versa would end up in
-            // Store smallest negative number.
-            min = Math.Min(nums[i], Math.Min(prevMin*nums[i], prevMax*nums[i]));
+            // We wnat to make three comparisons here
+            // 1. The single unit subarray at nums[i]
+            // 2. nums[i] and a previously known min (because it could be a new max, or new min depending on the signs)
+            // 3. nums[i] and a previously known max (because it could be a new max, or new min depending on the signs)
+            min = Math.Min(nums[i], Math.Min(nums[i] * prevMin, nums[i] * prevMax));
+            max = Math.Max(nums[i], Math.Max(nums[i] * prevMax, nums[i] * prevMin));
             
-            // This is where both - x -, or + x + would end up in
-            max = Math.Max(nums[i], Math.Max(prevMin*nums[i], prevMax*nums[i]));
-            
-            // Continually update the global max so far.
-            bestValue = Math.Max(bestValue, max);
+            result = Math.Max(max, result);
         }
         
-        return bestValue;
-    }  
+        return result;
+    }
 }
