@@ -13,22 +13,26 @@ public class WordDictionary {
         Root = new Node();
     }
     
-    public void AddWord(string word) {       
+    public void AddWord(string word) {
+        
         if (string.IsNullOrEmpty(word)) {
             return;
         }
         
-        Node curr = Root;        
+        Node curr = Root;
+        
         foreach (char c in word.ToLower()) {
                         
             // If it does not contain the character, create a new node for it
             // O(1) lookup
             if (!curr.children.ContainsKey(c)) {
                 curr.children.Add(c, new Node());
-            }            
+            }
+            
             // Finally, update cur to the next, since it will now contain c.
             curr = curr.children[c];
-        }        
+        }
+        
         curr.IsEnd = true;
     }
     
@@ -52,9 +56,7 @@ public class WordDictionary {
         if (word[idx] == '.') {
             // Iterate through all children here RECURSIVELY (DFS)
             foreach (var kvp in curr.children) {
-                char key = kvp.Key;
-                Node next = kvp.Value;
-                res = res || SearchDFS(word, idx+1, next);               
+                res = res || SearchDFS(word, idx+1, kvp.Value);               
             }
         // CASE 3: It does not exist here. just return false
         } else if (!curr.children.ContainsKey(word[idx])) {
