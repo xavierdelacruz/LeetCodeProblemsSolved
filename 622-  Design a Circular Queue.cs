@@ -1,4 +1,4 @@
-vpublic class MyCircularQueue {
+public class MyCircularQueue {
 
     private int front;
     private int rear;
